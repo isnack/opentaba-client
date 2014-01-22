@@ -1,4 +1,3 @@
-var Path={version:"0.8.4",map:function(a){if(Path.routes.defined.hasOwnProperty(a)){return Path.routes.defined[a]}else{return new Path.core.route(a)}},root:function(a){Path.routes.root=a},rescue:function(a){Path.routes.rescue=a},history:{initial:{},pushState:function(a,b,c){if(Path.history.supported){if(Path.dispatch(c)){history.pushState(a,b,c)}}else{if(Path.history.fallback){window.location.hash="#"+c}}},popState:function(a){var b=!Path.history.initial.popped&&location.href==Path.history.initial.URL;Path.history.initial.popped=true;if(b)return;Path.dispatch(document.location.pathname)},listen:function(a){Path.history.supported=!!(window.history&&window.history.pushState);Path.history.fallback=a;if(Path.history.supported){Path.history.initial.popped="state"in window.history,Path.history.initial.URL=location.href;window.onpopstate=Path.history.popState}else{if(Path.history.fallback){for(route in Path.routes.defined){if(route.charAt(0)!="#"){Path.routes.defined["#"+route]=Path.routes.defined[route];Path.routes.defined["#"+route].path="#"+route}}Path.listen()}}}},match:function(a,b){var c={},d=null,e,f,g,h,i;for(d in Path.routes.defined){if(d!==null&&d!==undefined){d=Path.routes.defined[d];e=d.partition();for(h=0;h<e.length;h++){f=e[h];i=a;if(f.search(/:/)>0){for(g=0;g<f.split("/").length;g++){if(g<i.split("/").length&&f.split("/")[g].charAt(0)===":"){c[f.split("/")[g].replace(/:/,"")]=i.split("/")[g];i=i.replace(i.split("/")[g],f.split("/")[g])}}}if(f===i){if(b){d.params=c}return d}}}}return null},dispatch:function(a){var b,c;if(Path.routes.current!==a){Path.routes.previous=Path.routes.current;Path.routes.current=a;c=Path.match(a,true);if(Path.routes.previous){b=Path.match(Path.routes.previous);if(b!==null&&b.do_exit!==null){b.do_exit()}}if(c!==null){c.run();return true}else{if(Path.routes.rescue!==null){Path.routes.rescue()}}}},listen:function(){var a=function(){Path.dispatch(location.hash)};if(location.hash===""){if(Path.routes.root!==null){location.hash=Path.routes.root}}if("onhashchange"in window&&(!document.documentMode||document.documentMode>=8)){window.onhashchange=a}else{setInterval(a,50)}if(location.hash!==""){Path.dispatch(location.hash)}},core:{route:function(a){this.path=a;this.action=null;this.do_enter=[];this.do_exit=null;this.params={};Path.routes.defined[a]=this}},routes:{current:null,root:null,rescue:null,previous:null,defined:{}}};Path.core.route.prototype={to:function(a){this.action=a;return this},enter:function(a){if(a instanceof Array){this.do_enter=this.do_enter.concat(a)}else{this.do_enter.push(a)}return this},exit:function(a){this.do_exit=a;return this},partition:function(){var a=[],b=[],c=/\(([^}]+?)\)/g,d,e;while(d=c.exec(this.path)){a.push(d[1])}b.push(this.path.split("(")[0]);for(e=0;e<a.length;e++){b.push(b[b.length-1]+a[e])}return b},run:function(){var a=false,b,c,d;if(Path.routes.defined[this.path].hasOwnProperty("do_enter")){if(Path.routes.defined[this.path].do_enter.length>0){for(b=0;b<Path.routes.defined[this.path].do_enter.length;b++){c=Path.routes.defined[this.path].do_enter[b]();if(c===false){a=true;break}}}}if(!a){Path.routes.defined[this.path].action()}}}
 var gushim={type:"FeatureCollection",features:[{type:"Feature",properties:{Name:"<Null>",Description:""},geometry:{type:"Polygon",coordinates:[[[35.2135912909144,31.7856054348903,0],[35.2135929416264,31.7856155805281,0],[35.213531408672,31.7856324944911,0],[35.2134878571169,31.7856437706282,0],[35.2134477699669,31.7856550465074,0],[35.2134076826993,31.7856651950678,0],[35.2133578623843,31.7856787262101,0],[35.2133321273602,31.785685491831,0],[35.2132737286787,31.7857012781462,0],[35.2132227535188,
 31.785714809315,0],[35.2131820063117,31.7857249578494,0],[35.2131359801906,31.7857373613404,0],[35.2130868196867,31.7857508923319,0],[35.2130599298164,31.7857576579754,0],[35.2130473922277,31.7857610407343,0],[35.213001036126,31.7857734441986,0],[35.2129551748268,31.785784720307,0],[35.212920366465,31.7857937410578,0],[35.2128754949806,31.7858050170722,0],[35.2128306235861,31.7858174203769,0],[35.2128165948846,31.7857497829242,0],[35.212821538513,31.7856877807641,0],[35.2128253287413,31.7856415609646,
 0],[35.2128289539937,31.7855953411755,0],[35.212832249803,31.7855547579383,0],[35.2128343921178,31.7855288297564,0],[35.2128380174623,31.7854837372724,0],[35.2128393358236,31.7854679548996,0],[35.2128414783365,31.7854442813296,0],[35.2128446096684,31.7854093346329,0],[35.2128480707392,31.7853721333019,0],[35.2128520262164,31.7853292954072,0],[35.2128601016252,31.7852379830746,0],[35.212863727351,31.7851973998127,0],[35.2128671882036,31.7851579438675,0],[35.2128706491546,31.7851196152282,0],[35.2128736155949,
@@ -7103,8 +7102,11 @@ Description:""},geometry:{type:"Polygon",coordinates:[[[35.2372369995881,31.8075
 31.8101436931593,0],[35.2213392678845,31.8101460346852,0],[35.2213366491792,31.8101483726042,0],[35.2213340220236,31.8101507033096,0],[35.2213313906435,31.8101530340155,0]]]}}]};
  // deprecating, replacing with serverless mode
 var RUNNING_LOCAL = (document.location.host == 'localhost' || document.location.host == '127.0.0.1' || document.location.protocol == 'file:');
-var API_URL = RUNNING_LOCAL ? 'http://0.0.0.0:5000/' : 'http://opentaba-server.herokuapp.com/';
-var ADDR_DB_API_URL = RUNNING_LOCAL ? 'http://0.0.0.0:5000/' : 'http://opentaba-address-db.herokuapp.com/';
+var API_URL = RUNNING_LOCAL ? 'http://0.0.0.0:5000/' : 'https://opentaba-server.herokuapp.com/';
+var ADDR_DB_API_URL = RUNNING_LOCAL ? 'http://0.0.0.0:5000/' : 'https://opentaba-address-db.herokuapp.com/';
+
+var gushimLayer;
+leafletPip.bassackwards = true;
 
 var CITY_NAME = "ירושלים"; //TODO: replace this with something more scalable.
 
@@ -7150,22 +7152,19 @@ function render_plans(plans, gid) {
 			 '</tr>' +
 			 '<tr class="details">' +
 			 '	<td colspan="2">' +
-			 '		<a href="' + plan_link + '" target="_blank" rel="tooltip" title="פתח באתר ממי"><!-- i class="icon-share"></i -->'+
+			 '		<a href="' + plan_link + '" target="_blank" rel="tooltip" title="פתח באתר ממי">'+
 			 '		תוכנית ' + p.number + '</a>' +
 			 '	</td>' +
 			 '	<td>';
 		var j;
 		for (j=0 ; j<p.tasrit_link.length ; j++)
-			out += '<a onclick="show_data('+ "'" + p.tasrit_link[j] + "')" + 
-					'" rel="tooltip" title="תשריט"><i class="icon-globe"></i></a>';
+			out += '<a href="'+ p.tasrit_link[j] + '" target="_blank" rel="tooltip" title="תשריט"><i class="icon-globe"></i></a>';
 
 		for (j=0 ; j<p.takanon_link.length ; j++)
-			out += '<a onclick="show_data('+ "'" + p.takanon_link[j] + "')" + 
-					'" rel="tooltip" title="תקנון"><i class="icon-file"></i></a>';
+			out += '<a href="'+ p.takanon_link[j] + '" target="_blank" rel="tooltip" title="תקנון"><i class="icon-file"></i></a>';
 
 		for (j=0 ; j<p.nispahim_link.length ; j++)
-			out += '<a onclick="show_data('+ "'" + p.nispahim_link[j] + "')" + 
-					'" rel="tooltip" title="נספחים"><i class="icon-folder-open"></i></a>';
+			out += '<a href="'+ p.nispahim_link[j] + '" target="_blank" rel="tooltip" title="נספחים"><i class="icon-folder-open"></i></a>';
 
 		for (j=0 ; j<p.files_link.length ; j++)
 			out += '<a href="http://mmi.gov.il' + p.files_link[j] + 
@@ -7202,7 +7201,7 @@ function get_gush(gush_id) {
 	location.hash = "#/gush/" + gush_id;
 	
 	$.getJSON(
-		API_URL + 'gush/' + gush_id + '/plans',		
+		API_URL + 'gush/' + gush_id + '/plans.json',
 		function(d) { 
 			//console.log(d.length);
 			render_plans(d, gush_id);
@@ -7228,25 +7227,51 @@ function get_gush_by_addr(addr) {
 	}
 	
 	console.log("get_gush_by_addr: " + addr);
+	
+	// Use Google api to find a gush by address
 	$.getJSON(
-		ADDR_DB_API_URL + 'locate/' + addr,
+		'https://maps.googleapis.com/maps/api/geocode/json?address='+addr+'&sensor=false',
 		function (r) {
 			$('#scrobber').hide();
-			var gid = r["gush_id"];var lat = r["lat"];var lon = r["lon"];
-			console.log('got gush id: ' + gid + ", lon: " + lon + ", lat: " + lat);
-			if (gid) {
-				get_gush(gid);
-				var pp = L.popup().setLatLng([lat, lon]).setContent('<b>' + addr + '</b>').openOn(map);
-				$('#addr-error-p').html('');
-			} else {
+			$('#addr-error-p').html('');
+
+			if (r['status'] == 'OK' && r['results'].length > 0) {
+				// Here we have a case when Google api returns without an actual place (even a street), 
+				// so it only has a city. This happens because it didn't find the address, but we 
+				// did append the name of the current city at the end, and Google apparently thinks  
+				// 'better something than nothing'. We're trying to ignore this (should test though)
+				if (r['results'][0]['types'].length == 2 && 
+					$.inArray('locality', r['results'][0]['types']) > -1 && 
+					$.inArray('political', r['results'][0]['types']) > -1) {
+					$('#addr-error-p').html('כתובת שגויה או שלא נמצאו נתונים');
+				}
+				else {
+					var lat = r['results'][0]['geometry']['location']['lat'];
+					var lon = r['results'][0]['geometry']['location']['lng'];
+					console.log('got lon: ' + lon + ', lat: ' + lat);
+      
+					// Using leafletpip we try to find an object in the gushim layer with the coordinate we got
+					var gid = leafletPip.pointInLayer([lat, lon], gushimLayer, true);
+					if (gid && gid.length > 0) {
+						get_gush(gid[0].gushid);
+						var pp = L.popup().setLatLng([lat, lon]).setContent('<b>' + addr + '</b>').openOn(map);
+					} else {
+						$('#addr-error-p').html('לא נמצא גוש התואם לכתובת'); // TODO: when enabling multiple cities change the message to point users to try a differenct city
+					}
+				}
+			}
+			else if (r['status'] == 'ZERO_RESULTS') {
 				$('#addr-error-p').html('כתובת שגויה או שלא נמצאו נתונים');
+			}
+			else {
+				$('#addr-error-p').html('חלה שגיאה בחיפוש הכתובת, אנא נסו שנית מאוחר יותר');
 			}
 		}
 	)
    .fail(
    		function(){
    			$('#scrobber').hide(); 
-   			$('#addr-error-p').html('לא נמצאו נתונים לכתובת "' + addr + '"'); 
+   			$('#addr-error-p').html('חלה שגיאה בחיפוש הכתובת, אנא נסו שנית מאוחר יותר');
    		}
    	);
 }
@@ -7327,7 +7352,7 @@ $(document).ready(function(){
 });
 
 
-var map = L.map('map', { scrollWheelZoom: true }).setView(MAP_CENTER, DEFAULT_ZOOM);
+var map = L.map('map', { scrollWheelZoom: true, attributionControl: false }).setView(MAP_CENTER, DEFAULT_ZOOM);
 
 tile_url = 'http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png';
 L.tileLayer(tile_url, {
@@ -7335,7 +7360,7 @@ L.tileLayer(tile_url, {
 	minZoom: 13
 }).addTo(map);
 
-L.geoJson(gushim,
+gushimLayer = L.geoJson(gushim,
 	{
 		onEachFeature: onEachFeature,
 		style : {
