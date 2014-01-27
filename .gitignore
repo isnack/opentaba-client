@@ -10,3 +10,4 @@ app/lib/jquery/*
 app/lib/font-awesome/*
 app/lib/handlebars/*
 
+.gitignore.swp
